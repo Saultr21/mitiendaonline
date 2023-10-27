@@ -2,7 +2,8 @@
 include 'config.php';
 
 try {
-    $stmt = $conn->query("SELECT * FROM productos");
+    $stmt = $conn->query("SELECT productos.*, categorias.Nombre as categoria_nombre FROM productos 
+    JOIN categorias ON productos.Categoria = categorias.Id;");
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error de consulta: " . $e->getMessage());
@@ -40,7 +41,7 @@ try {
                         <td><?= htmlspecialchars($producto['Nombre']) ?></td>
                         <td><?= htmlspecialchars($producto['Precio']) ?></td>
                         <td><img src="<?= htmlspecialchars($producto['Imagen']) ?>" alt="<?= htmlspecialchars($producto['Nombre']) ?>" height="50"></td>
-                        <td><?= htmlspecialchars($producto['Categoria']) ?></td>
+                        <td><?= htmlspecialchars($producto['categoria_nombre']) ?></td>
                         <td><a class="btn btn-warning" href="edita_producto.php?id=<?= htmlspecialchars($producto['id']) ?>">Editar</a></td>
                         <td><a class="btn btn-danger" href="elimina_producto.php?id=<?= htmlspecialchars($producto['id']) ?>">Eliminar</a></td>
                     </tr>
