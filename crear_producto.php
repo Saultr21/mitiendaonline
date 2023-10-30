@@ -73,7 +73,7 @@ try {
     </div>
     <div class="form-group">
         <label for="Nombre">Categoria: </label>
-        <select class="form-control" id="Categoria" name="Categoria" required>
+        <select class="form-control" id="categoria" name="categoria" required>
             <option value="">Selecciona una categoría</option>
             <?php foreach ($categorias as $cat): ?>
                 <option value="<?php echo htmlspecialchars($cat['id']); ?>" <?php echo $cat['id'] === $categoria ? "selected" : ""; ?>>
