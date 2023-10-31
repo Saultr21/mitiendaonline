@@ -26,20 +26,38 @@ if (isset($_GET['id'])) {
 
 // Si se ha enviado el formulario, actualizar la información del producto
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Validar y procesar la entrada aquí
+      // Procesar imagen subida
+      $imagen = $producto['Imagen']; // Utiliza la imagen existente por defecto
+      if (isset($_FILES['Imagen']) && $_FILES['Imagen']['error'] === UPLOAD_ERR_OK) {
+        $imagen_nombre = $_FILES['Imagen']['name'];
+        $imagen_temp = $_FILES['Imagen']['tmp_name'];
+        $imagen_tipo = $_FILES['Imagen']['type'];
+        $imagen_tamano = $_FILES['Imagen']['size'];
+
+        // Verificar que el archivo subido sea una imagen
+        $permitidos = array("image/jpg", "image/jpeg", "image/png");
+        if (in_array($imagen_tipo, $permitidos)) {
+            // Mover la imagen a la carpeta media
+            $ruta = "media/" . $imagen_nombre;
+            move_uploaded_file($imagen_temp, $ruta);
+            $imagen = $imagen_nombre;
+        } else {
+            $errores[] = "El archivo subido no es una imagen válida.";
+        }
+    }
 
     // Actualizar el producto en la base de datos
     try {
         $stmt = $conn->prepare("UPDATE productos SET Nombre = :Nombre, Precio = :Precio, Imagen = :Imagen, Categoria = :Categoria WHERE id = :id");
         $stmt->bindParam(':Nombre', $_POST['Nombre']);
         $stmt->bindParam(':Precio', $_POST['Precio']);
-        $stmt->bindParam(':Imagen', $_POST['Imagen']);
+        $stmt->bindParam(':Imagen', $imagen);
         $stmt->bindParam(':Categoria', $_POST['Categoria']);
         $stmt->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
         $stmt->execute();
         $producto['Nombre'] = $_POST['Nombre'];
         $producto['Precio'] = $_POST['Precio'];
-        $producto['Imagen'] = $_POST['Imagen'];
+        $producto['Imagen'] = $imagen;
         $producto['Categoria'] = $_POST['Categoria'];
     } catch (PDOException $e) {
         die("Error de actualización: " . $e->getMessage());
@@ -89,7 +107,7 @@ try {
 
         <!-- Formulario para editar el producto -->
         <?php if ($producto) : ?>
-            <form method="post">
+            <form method="post" enctype="multipart/form-data">
                 <input type="hidden" name="id" value="<?= $producto['id'] ?>">
                 <div class="form-group">
                     <label for="Nombre">Nombre:</label>
@@ -101,7 +119,7 @@ try {
                 </div>
                 <div class="form-group">
                     <label for="Imagen">Imagen:</label>
-                    <input type="text" class="form-control" id="Imagen" name="Imagen" value="<?= htmlspecialchars($producto['Imagen']) ?>">
+                    <input type="file" class="form-control" id="Imagen" name="Imagen" value="<?= htmlspecialchars($producto['Imagen']) ?>">
                 </div>
                 <div class="form-group">
                     <label for="Categoria">Categoría:</label>
