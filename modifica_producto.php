@@ -14,8 +14,8 @@ $producto = null;
 // Obtener el producto a editar si se ha proporcionado un ID
 if (isset($_GET['id'])) {
     try {
-        $stmt = $conn->prepare("SELECT productos.*, categorias.Nombre as categoria_nombre FROM productos 
-        JOIN categorias ON productos.Categoria = categorias.Id WHERE productos.id = :id");
+        $stmt = $conn->prepare("SELECT productos.*, categorías.Nombre as categoria_nombre FROM productos 
+        JOIN categorías ON productos.Categoría = categorías.Id WHERE productos.id = :id");
         $stmt->bindParam(':id', $_GET['id'], PDO::PARAM_INT);
         $stmt->execute();
         $producto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -30,17 +30,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Actualizar el producto en la base de datos
     try {
-        $stmt = $conn->prepare("UPDATE productos SET Nombre = :Nombre, Precio = :Precio, Imagen = :Imagen, Categoria = :Categoria WHERE id = :id");
+        $stmt = $conn->prepare("UPDATE productos SET Nombre = :Nombre, Precio = :Precio, Imagen = :Imagen, Categoría = :Categoría WHERE id = :id");
         $stmt->bindParam(':Nombre', $_POST['Nombre']);
         $stmt->bindParam(':Precio', $_POST['Precio']);
         $stmt->bindParam(':Imagen', $_POST['Imagen']);
-        $stmt->bindParam(':Categoria', $_POST['Categoria']);
+        $stmt->bindParam(':Categoría', $_POST['Categoría']);
         $stmt->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
         $stmt->execute();
         $producto['Nombre'] = $_POST['Nombre'];
         $producto['Precio'] = $_POST['Precio'];
         $producto['Imagen'] = $_POST['Imagen'];
-        $producto['Categoria'] = $_POST['Categoria'];
+        $producto['Categoría'] = $_POST['Categoría'];
     } catch (PDOException $e) {
         die("Error de actualización: " . $e->getMessage());
     }
@@ -48,10 +48,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<script>alert('Producto actualizado correctamente');</script>";
 }
 
-$categorias = [];
+$categorías = [];
 try {
-    $stmt = $conn->query("SELECT id, nombre FROM categorias");
-    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT id, nombre FROM categorías");
+    $categorías = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "<p>Error: " . $e->getMessage() . "</p>";
 }
@@ -104,11 +104,11 @@ try {
                     <input type="text" class="form-control" id="Imagen" name="Imagen" value="<?= htmlspecialchars($producto['Imagen']) ?>">
                 </div>
                 <div class="form-group">
-                    <label for="Categoria">Categoría:</label>
-                    <select class="form-control" id="Categoria" name="Categoria" required>
-                        <option value="">Selecciona una categoría</option>
-                        <?php foreach ($categorias as $cat) : ?>
-                            <option value="<?= htmlspecialchars($cat['id']); ?>" <?= $cat['id'] == $producto['Categoria'] ? 'selected' : '' ?>>
+                    <label for="Categoría">Categoría:</label>
+                    <select class="form-control" id="Categoría" name="Categoría" required>
+                        <option value="">Selecciona una categoria</option>
+                        <?php foreach ($categorías as $cat) : ?>
+                            <option value="<?= htmlspecialchars($cat['id']); ?>" <?= $cat['id'] == $producto['Categoría'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($cat['nombre']); ?>
                             </option>
                         <?php endforeach; ?>

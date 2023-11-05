@@ -29,10 +29,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 }
 
 // Obtener categorías de la BD
-$categorias = [];
+$categorías = [];
 try {
-    $stmt = $conn->query("SELECT id, nombre FROM categorias");
-    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $stmt = $conn->query("SELECT id, nombre FROM categorías");
+    $categorías = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "<p>Error: " . $e->getMessage() . "</p>";
 }
@@ -72,10 +72,10 @@ try {
         <input class="form-control" type="text" name="imagen" value="<?php echo htmlspecialchars($imagen); ?>">
     </div>
     <div class="form-group">
-        <label for="Nombre">Categoria: </label>
+        <label for="Nombre">Categoría: </label>
         <select class="form-control" id="categoria" name="categoria" required>
-            <option value="">Selecciona una categoría</option>
-            <?php foreach ($categorias as $cat): ?>
+            <option value="">Selecciona una categoria</option>
+            <?php foreach ($categorías as $cat): ?>
                 <option value="<?php echo htmlspecialchars($cat['id']); ?>" <?php echo $cat['id'] === $categoria ? "selected" : ""; ?>>
                     <?php echo htmlspecialchars($cat['nombre']); ?>
                 </option>

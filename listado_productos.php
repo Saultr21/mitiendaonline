@@ -2,8 +2,8 @@
 include 'config.php';
 
 try {
-    $stmt = $conn->query("SELECT productos.*, categorias.Nombre as categoria_nombre FROM productos 
-    JOIN categorias ON productos.Categoria = categorias.Id;");
+    $stmt = $conn->query("SELECT productos.*, categorías.Nombre as categoria_nombre FROM productos 
+    JOIN categorías ON productos.Categoría = categorías.Id;");
     $productos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error de consulta: " . $e->getMessage());
