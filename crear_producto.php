@@ -3,12 +3,12 @@ include 'config.php';
 include 'validaciones.php';
 
 $errores = [];
-$nombre = $precio = $imagen = $categoria = "";
+$nombre = $precio = $imagen = $categoría = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
-    $categoria = $_POST['categoria'];
+    $categoría = $_POST['categoría'];
 
       // Procesar imagen subida
       if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
@@ -29,15 +29,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 
-    $errores = validarProducto($nombre, $precio, $imagen, $categoria);
+    $errores = validarProducto($nombre, $precio, $imagen, $categoría);
     
     if (empty($errores)) {
         try {
-            $stmt = $conn->prepare("INSERT INTO productos (nombre, precio, imagen, categoria) VALUES (:nombre, :precio, :imagen, :categoria)");
+            $stmt = $conn->prepare("INSERT INTO productos (nombre, precio, imagen, categoría) VALUES (:nombre, :precio, :imagen, :categoria)");
             $stmt->bindParam(':nombre', $nombre);
             $stmt->bindParam(':precio', $precio);
             $stmt->bindParam(':imagen', $imagen);
-            $stmt->bindParam(':categoria', $categoria);
+            $stmt->bindParam(':categoria', $categoría);
             $stmt->execute();
             echo "<p>Producto creado con éxito. <a href='index.php'>Volver al menú principal</a></p>";
         } catch (PDOException $e) {
@@ -91,10 +91,10 @@ try {
     </div>
     <div class="form-group">
         <label for="Nombre">Categoría: </label>
-        <select class="form-control" id="categoria" name="categoria" required>
+        <select class="form-control" id="categoría" name="categoría" required>
             <option value="">Selecciona una categoria</option>
             <?php foreach ($categorías as $cat): ?>
-                <option value="<?php echo htmlspecialchars($cat['id']); ?>" <?php echo $cat['id'] === $categoria ? "selected" : ""; ?>>
+                <option value="<?php echo htmlspecialchars($cat['id']); ?>" <?php echo $cat['id'] === $categoría ? "selected" : ""; ?>>
                     <?php echo htmlspecialchars($cat['nombre']); ?>
                 </option>
             <?php endforeach; ?>

@@ -48,17 +48,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Actualizar el producto en la base de datos
     try {
-        $stmt = $conn->prepare("UPDATE productos SET Nombre = :Nombre, Precio = :Precio, Imagen = :Imagen, Categoría = :Categoría WHERE id = :id");
+        $stmt = $conn->prepare("UPDATE productos SET Nombre = :Nombre, Precio = :Precio, Imagen = :Imagen, Categoría = :Categoria WHERE id = :id");
         $stmt->bindParam(':Nombre', $_POST['Nombre']);
         $stmt->bindParam(':Precio', $_POST['Precio']);
-        $stmt->bindParam(':Imagen', $_POST['Imagen']);
+        $stmt->bindParam(':Imagen', $imagen);
         $stmt->bindParam(':Categoria', $_POST['Categoria']);
         $stmt->bindParam(':id', $_POST['id'], PDO::PARAM_INT);
         $stmt->execute();
         $producto['Nombre'] = $_POST['Nombre'];
         $producto['Precio'] = $_POST['Precio'];
-        $producto['Imagen'] = $_POST['Imagen'];
-        $producto['Categoria'] = $_POST['Categoria'];
+        $producto['Imagen'] = $imagen;
+        $producto['Categoría'] = $_POST['Categoria'];
     } catch (PDOException $e) {
         die("Error de actualización: " . $e->getMessage());
     }
@@ -66,10 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     echo "<script>alert('Producto actualizado correctamente');</script>";
 }
 
-$categorías = [];
+$categorias = [];
 try {
     $stmt = $conn->query("SELECT id, nombre FROM categorías");
-    $categorías = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "<p>Error: " . $e->getMessage() . "</p>";
 }
@@ -122,10 +122,10 @@ try {
                     <input type="file" class="form-control" id="Imagen" name="Imagen" value="<?= htmlspecialchars($producto['Imagen']) ?>">
                 </div>
                 <div class="form-group">
-                    <label for="Categoría">Categoría:</label>
-                    <select class="form-control" id="Categoría" name="Categoría" required>
-                        <option value="">Selecciona una categoria</option>
-                        <?php foreach ($categorías as $cat) : ?>
+                    <label for="Categoria">Categoría:</label>
+                    <select class="form-control" id="Categoria" name="Categoria" required>
+                        <option value="">Selecciona una categoría</option>
+                        <?php foreach ($categorias as $cat) : ?>
                             <option value="<?= htmlspecialchars($cat['id']); ?>" <?= $cat['id'] == $producto['Categoría'] ? 'selected' : '' ?>>
                                 <?= htmlspecialchars($cat['nombre']); ?>
                             </option>
