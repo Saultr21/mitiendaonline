@@ -40,7 +40,7 @@ try {
                         <td><?= htmlspecialchars($producto['id']) ?></td>
                         <td><?= htmlspecialchars($producto['Nombre']) ?></td>
                         <td><?= htmlspecialchars($producto['Precio']) ?></td>
-                        <td><img src="<?= htmlspecialchars($producto['Imagen']) ?>" alt="<?= htmlspecialchars($producto['Nombre']) ?>" height="50"></td>
+                        <td><img src="media/<?= htmlspecialchars($producto['Imagen']) ?>" alt="<?= htmlspecialchars($producto['Nombre']) ?>" height="50"></td>
                         <td><?= htmlspecialchars($producto['categoria_nombre']) ?></td>
                         <td><a class="btn btn-warning" href="modifica_producto.php?id=<?= htmlspecialchars($producto['id']) ?>">Editar</a></td>
                         <td><a class="btn btn-danger" href="elimina_producto.php?id=<?= htmlspecialchars($producto['id']) ?>">Eliminar</a></td>

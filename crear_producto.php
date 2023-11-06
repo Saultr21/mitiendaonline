@@ -8,8 +8,26 @@ $nombre = $precio = $imagen = $categoria = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
-    $imagen = $_POST['imagen'];
     $categoria = $_POST['categoria'];
+
+      // Procesar imagen subida
+      if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
+        $imagen_nombre = $_FILES['imagen']['name'];
+        $imagen_temp = $_FILES['imagen']['tmp_name'];
+        $imagen_tipo = $_FILES['imagen']['type'];
+        $imagen_tamano = $_FILES['imagen']['size'];
+
+        // Verificar que el archivo subido sea una imagen
+        $permitidos = array("image/jpg", "image/jpeg", "image/png");
+        if (in_array($imagen_tipo, $permitidos)) {
+            // Mover la imagen a la carpeta media
+            $ruta = "media/" . $imagen_nombre;
+            move_uploaded_file($imagen_temp, $ruta);
+            $imagen = $imagen_nombre;
+        } else {
+            $errores[] = "El archivo subido no es una imagen válida.";
+        }
+    }
 
     $errores = validarProducto($nombre, $precio, $imagen, $categoria);
     
@@ -58,7 +76,7 @@ try {
 </head>
 <body>
 <div class="container mt-5">
-    <form action="crear_producto.php" method="post">
+    <form action="crear_producto.php" method="post" enctype="multipart/form-data">
     <div class="form-group">
         <label for="Nombre">Nombre: </label>
         <input class="form-control" type="text" name="nombre" value="<?php echo htmlspecialchars($nombre); ?>">
@@ -69,7 +87,7 @@ try {
     </div>
     <div class="form-group">
         <label for="Nombre">Imagen: </label>
-        <input class="form-control" type="text" name="imagen" value="<?php echo htmlspecialchars($imagen); ?>">
+        <input class="form-control" type="file" name="imagen" value="<?php echo htmlspecialchars($imagen); ?>">
     </div>
     <div class="form-group">
         <label for="Nombre">Categoría: </label>
