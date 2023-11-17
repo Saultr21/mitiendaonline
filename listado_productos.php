@@ -1,5 +1,16 @@
 <?php
 include 'config.php';
+require 'cabecera.php';
+
+// Almacenar la página actual como destino
+$_SESSION['pagina_destino'] = basename($_SERVER['PHP_SELF']);
+
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: form_login.php'); // Redirigir si no hay sesión
+    exit();
+}
+
 
 try {
     $stmt = $conn->query("SELECT productos.*, categorías.Nombre as categoria_nombre FROM productos 
@@ -20,6 +31,7 @@ try {
     <title>Listado de Productos</title>
 </head>
 <body>
+
     <div class="container mt-5">
         <h1>Listado de Productos</h1>
         <table class="table table-bordered">

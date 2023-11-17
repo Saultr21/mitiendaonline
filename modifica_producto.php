@@ -1,5 +1,16 @@
 <?php
 include 'config.php';
+require 'cabecera.php';
+
+// Almacenar la página actual como destino
+$_SESSION['pagina_destino'] = basename($_SERVER['PHP_SELF']);
+
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: form_login.php'); // Redirigir si no hay sesión
+    exit();
+}
+
 
 // Obtener la lista de productos para el menú desplegable
 try {

@@ -1,6 +1,17 @@
 <?php
 include 'config.php';
 include 'validaciones.php';
+require 'cabecera.php';
+// Almacenar la página actual como destino
+$_SESSION['pagina_destino'] = basename($_SERVER['PHP_SELF']);
+
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['usuario_id'])) {
+    header('Location: form_login.php'); // Redirigir si no hay sesión
+    exit();
+}
+
+
 
 $errores = [];
 $nombre = $precio = $imagen = $categoría = "";
@@ -75,6 +86,7 @@ try {
     <title>Listado de Productos</title>
 </head>
 <body>
+
 <div class="container mt-5">
     <form action="crear_producto.php" method="post" enctype="multipart/form-data">
     <div class="form-group">
