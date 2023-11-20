@@ -1,17 +1,13 @@
 <?php
 include 'config.php';
 require 'cabecera.php';
-
 // Almacenar la página actual como destino
 $_SESSION['pagina_destino'] = basename($_SERVER['PHP_SELF']);
-
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: form_login.php'); // Redirigir si no hay sesión
     exit();
 }
-
-
 // Obtener la lista de productos para el menú desplegable
 try {
     $stmt = $conn->query("SELECT id, Nombre FROM productos");
@@ -19,9 +15,7 @@ try {
 } catch (PDOException $e) {
     die("Error de consulta: " . $e->getMessage());
 }
-
 $producto = null;
-
 // Obtener el producto a editar si se ha proporcionado un ID
 if (isset($_GET['id'])) {
     try {
@@ -34,7 +28,6 @@ if (isset($_GET['id'])) {
         die("Error de consulta: " . $e->getMessage());
     }
 }
-
 // Si se ha enviado el formulario, actualizar la información del producto
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       // Procesar imagen subida
@@ -56,7 +49,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errores[] = "El archivo subido no es una imagen válida.";
         }
     }
-
     // Actualizar el producto en la base de datos
     try {
         $stmt = $conn->prepare("UPDATE productos SET Nombre = :Nombre, Precio = :Precio, Imagen = :Imagen, Categoría = :Categoria WHERE id = :id");
@@ -73,10 +65,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } catch (PDOException $e) {
         die("Error de actualización: " . $e->getMessage());
     }
-
     echo "<script>alert('Producto actualizado correctamente');</script>";
 }
-
 $categorias = [];
 try {
     $stmt = $conn->query("SELECT id, nombre FROM categorías");
@@ -85,10 +75,8 @@ try {
     echo "<p>Error: " . $e->getMessage() . "</p>";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -96,7 +84,6 @@ try {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <title>Editar Producto</title>
 </head>
-
 <body>
     <div class="container mt-5">
         <h1>Editar Producto</h1>
@@ -115,7 +102,6 @@ try {
                 </select>
             </div>
         </form>
-
         <!-- Formulario para editar el producto -->
         <?php if ($producto) : ?>
             <form method="post" enctype="multipart/form-data">
@@ -147,7 +133,6 @@ try {
                 <button type="submit" class="btn btn-primary">Guardar cambios</button>
             </form>
         <?php endif; ?>
-
         <a class="btn btn-secondary mt-3" href="listado_productos.php">Volver al listado</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>

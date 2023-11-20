@@ -1,17 +1,13 @@
 <?php
 include 'config.php';
-
 require 'cabecera.php';
 // Almacenar la página actual como destino
 $_SESSION['pagina_destino'] = basename($_SERVER['PHP_SELF']);
-
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: form_login.php'); // Redirigir si no hay sesión
     exit();
 }
-
-
 // Obtener la lista de productos para el menú desplegable
 try {
     $stmt = $conn->query("SELECT id, Nombre FROM productos");
@@ -19,9 +15,7 @@ try {
 } catch (PDOException $e) {
     die("Error de consulta: " . $e->getMessage());
 }
-
 $producto = null;
-
 // Obtener el producto a eliminar si se ha proporcionado un ID
 if (isset($_POST['id'])) {
     $producto_id = $_POST['id'];
@@ -34,7 +28,6 @@ if (isset($_POST['id'])) {
         die("Error de eliminación: " . $e->getMessage());
     }
 }
-
 $categorías = [];
 try {
     $stmt = $conn->query("SELECT id, nombre FROM categorías");
@@ -43,10 +36,8 @@ try {
     echo "<p>Error: " . $e->getMessage() . "</p>";
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -54,7 +45,6 @@ try {
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
     <title>Eliminar Producto</title>
 </head>
-
 <body>
     <div class="container mt-5">
         <h1>Eliminar Producto</h1>
@@ -74,12 +64,10 @@ try {
                 <button type="submit" class="btn btn-danger mt-2">Eliminar Producto</button>
             </div>
         </form>
-
         <a class="btn btn-secondary mt-3" href="listado_productos.php">Volver al listado</a>
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </body>
-
 </html>

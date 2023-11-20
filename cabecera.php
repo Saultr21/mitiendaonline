@@ -1,4 +1,9 @@
-<?php session_start(); ?>
+<?php session_start(); 
+if (isset($_POST['cerrar_sesion'])) {
+    session_destroy();
+    header('Location: index.php');
+    exit;
+}?>
 <div class="" style="max-height: 80px; background-color: grey; display: flex; justify-content: space-between; align-items: center; padding: 0 20px;">
     <h1 class="text-center">Mi Tienda Online</h1>
     <div style="display: flex; align-items: center;">

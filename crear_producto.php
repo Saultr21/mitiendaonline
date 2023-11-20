@@ -4,30 +4,23 @@ include 'validaciones.php';
 require 'cabecera.php';
 // Almacenar la página actual como destino
 $_SESSION['pagina_destino'] = basename($_SERVER['PHP_SELF']);
-
 // Verificar si el usuario ha iniciado sesión
 if (!isset($_SESSION['usuario_id'])) {
     header('Location: form_login.php'); // Redirigir si no hay sesión
     exit();
 }
-
-
-
 $errores = [];
 $nombre = $precio = $imagen = $categoría = "";
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $nombre = $_POST['nombre'];
     $precio = $_POST['precio'];
     $categoría = $_POST['categoría'];
-
       // Procesar imagen subida
       if (isset($_FILES['imagen']) && $_FILES['imagen']['error'] === UPLOAD_ERR_OK) {
         $imagen_nombre = $_FILES['imagen']['name'];
         $imagen_temp = $_FILES['imagen']['tmp_name'];
         $imagen_tipo = $_FILES['imagen']['type'];
         $imagen_tamano = $_FILES['imagen']['size'];
-
         // Verificar que el archivo subido sea una imagen
         $permitidos = array("image/jpg", "image/jpeg", "image/png");
         if (in_array($imagen_tipo, $permitidos)) {
@@ -39,9 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $errores[] = "El archivo subido no es una imagen válida.";
         }
     }
-
     $errores = validarProducto($nombre, $precio, $imagen, $categoría);
-    
     if (empty($errores)) {
         try {
             $stmt = $conn->prepare("INSERT INTO productos (nombre, precio, imagen, categoría) VALUES (:nombre, :precio, :imagen, :categoria)");
@@ -56,7 +47,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     }
 }
-
 // Obtener categorías de la BD
 $categorías = [];
 try {
@@ -66,7 +56,6 @@ try {
     echo "<p>Error: " . $e->getMessage() . "</p>";
 }
 ?>
-
 <?php if (!empty($errores)): ?>
     <p>Error(es):</p>
     <ul>
@@ -86,7 +75,6 @@ try {
     <title>Listado de Productos</title>
 </head>
 <body>
-
 <div class="container mt-5">
     <form action="crear_producto.php" method="post" enctype="multipart/form-data">
     <div class="form-group">
@@ -113,8 +101,6 @@ try {
         </select><br>
     </div>
         <input class="btn btn-primary" type="submit" value="Crear Producto">
-        
-
     <a class="btn btn-primary" href="index.php">Volver al menú</a>
     </form>
 </div>
